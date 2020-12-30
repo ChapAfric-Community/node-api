@@ -59,5 +59,56 @@ router.put('/tracks/:id', async (req, res) => {
     }
 });
 
+// ================================================================
+
+// SKILL ENDPOINTS
+
+// get skills
+router.get('/skills', async (req, res) => {
+    try{
+        Skill.find()
+            .then(skills => {
+                res.json(skills)
+            })
+    }catch(err){
+        res.status(400).json({msg: err})
+    }
+});
+
+// get Skill by id
+router.get('/skills/:id', async (req, res) => {
+    try{
+        Skill.findById(req.params.id)
+            .then(skill => {
+                res.json(skill)
+            })
+    }catch(err){
+        res.status(400).json({msg: err})
+    }
+});
+
+// post a Skill
+router.post('/skills',  async(req, res) => {
+    const { title, description, user} = req.body;
+    try{
+        const newSkill = new Skill(req.body)
+        await newSkill.save()
+        .then(res.json(newSkill));
+    }catch(err){
+        res.status(400).json({msg: err})
+    }
+});
+
+// edit a Skill
+router.put('/skills/:id', async (req, res) => {
+    const { title, description, user} = req.body;
+    try{
+        await Skill.findByIdAndUpdate(req.params.id, req.body, {new: true})
+        .then(res.json(req.body));
+    }catch(err){
+        res.status(400).json({msg: err})
+    }
+});
+
 
 module.exports = router;
