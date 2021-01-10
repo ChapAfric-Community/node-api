@@ -162,5 +162,57 @@ router.put('/Posts/:id', async (req, res) => {
     }
 });
 
+// ENROLLMENT ENDPOINTS
+
+// get enrollments
+router.get('/enrollments', async (req, res) => {
+    try{
+        Enrollment.find()
+            .then(enrollments => {
+                res.json(enrollments)
+            })
+    }catch(err){
+        res.status(400).json({msg: err})
+    }
+});
+
+// get Enrollment by id
+router.get('/enrollments/:id', async (req, res) => {
+    try{
+        Enrollment.findById(req.params.id)
+            .then(enrollments => {
+                res.json(enrollments)
+            })
+    }catch(err){
+        res.status(400).json({msg: err})
+    }
+});
+
+// Enrollment a Enrollment
+router.post('/enrollments',  async(req, res) => {
+    const { user, track} = req.body;
+    try{
+        const newEnrollment = new Enrollment(req.body)
+        await newEnrollment.save()
+            .then(res.json(newEnrollment));
+    }catch(err){
+        res.status(400).json({msg: err})
+    }
+});
+
+// edit a Enrollment
+router.put('/enrollments/:id', async (req, res) => {
+    const { user, track} = req.body;
+    try{
+        await Enrollment.findByIdAndUpdate(req.params.id, req.body, {new: true})
+            .then(res.json(req.body));
+    }catch(err){
+        res.status(400).json({msg: err})
+    }
+});
+
+// ENROLLMENT ENDPOINTS
+
+
 
 module.exports = router;
